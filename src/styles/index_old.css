@@ -1,0 +1,352 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Inter", sans-serif;
+  }
+}
+
+@layer components {
+  input[type="checkbox"]:checked ~ label span svg {
+    @apply inline-flex;
+  }
+
+  .sticky .header-logo {
+    @apply py-5 lg:py-2;
+  }
+
+  .sticky .menu-scroll.active {
+    @apply opacity-70;
+  }
+
+  input#togglePlan:checked ~ .dot {
+    @apply translate-x-full;
+  }
+
+  input#checkboxLabel:checked ~ .box span {
+    @apply opacity-100;
+  }
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+  /* background-image: url("https://www.botify.com/wp-content/uploads/2020/12/3-url-parameters.jpg"); */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: transparent;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tab-pane {
+  display: none; 
+}
+
+.tab-pane.active {
+  display: block; 
+}
+
+.activeNav {
+  background-color: #f3f4f6; 
+  color: #000; 
+  font-weight: bold; 
+  padding: 0.5rem 1rem; 
+  border-bottom: 2px solid #007bff;
+  width: fit-content;
+  margin: 0 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease; 
+  background-color: #007bff!important;
+
+}
+
+.activeNav:hover {
+  background-color: #eaecef;
+  cursor: pointer; 
+}
+
+.activeNav:hover {
+  background-color: #eaecef;
+  cursor: pointer; 
+}
+
+.mb-5.cursor-pointer h3 {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.activeNav h3 {
+  color: #fff!important;
+  font-weight: 500;
+}
+
+
+section.topbar {
+  background: #0A7EC4;
+  z-index: 999;
+  width: 100%;
+  position: relative;
+}
+
+section.topbar .call-email {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 0;
+  height: 100%;
+}
+
+
+section.topbar .call-email .inner-div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff!important;
+}
+
+header.header {
+  padding-top: 30px;
+}
+
+header.header.shadow-sticky.backdrop-blur-sm {
+  padding: 0;
+}
+
+.border-radius {
+  border-radius: 50%;
+}
+
+.mb-5.cursor-pointer {
+  padding: 10px;
+  margin: 0;
+  min-height: 48px;
+  margin-bottom: 0;
+}
+
+.service-sec .service-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.service-sec .service-row .col-md-3 {
+  width: 25%;
+  padding: 10px;
+  border-left: 1px solid;
+}
+
+.service-sec .service-row .col-md-9 {
+  width: 75%;
+}
+
+.service-sec .service-row .col-md-12 {
+  width: 100%;
+}
+
+.service-sec .service-row .col-md-3:first-child {
+  border: 0;
+}
+
+.service-sec .service-row .col-md-3 p {
+  text-align: justify;
+}
+
+.service-table{
+  width: 100%;
+  text-align: left;
+}
+.service-table th, .service-table td {
+  padding: 10px;
+}
+
+.service-table thead tr:nth-child(odd), .service-table tbody tr:nth-child(even) {
+  background: #e9ecf1;
+}
+
+h3{
+  font-size: 28px;
+  font-weight: 500;
+}
+
+h4{
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.service-sec h4 {
+  margin: 16px 0;
+}
+
+.bg-img {
+  background: url("/images/landing/con_ban.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  background-attachment: fixed;
+}
+
+.home-hover .border {
+  position: relative;
+  overflow: hidden;
+  max-height: 320px!important;
+  display: flex;
+  align-items: flex-start;
+  width: 100%!important;
+}
+
+.home-hover .border::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -100%;
+  width: 100%;
+  height: 100%;
+  background: #94b3c6;
+  transition: 0.8s;
+}
+.home-hover .border p {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: justify;
+}
+
+.home-hover .border:hover .wow.fadeInUp {
+  z-index: 99;
+  color: #fff!important;
+}
+
+.home-hover .border:hover::before {
+  bottom: 0%;
+}
+
+.home-hover .border:hover> .wow.fadeInUp p {
+  color: #fff;
+}
+
+ .home-hover .border:hover> .wow.fadeInUp .border-radius {
+  background: #fff;
+ }
+
+
+ section#contact .info-box {
+  padding: 20px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 0 18px 1px #00000014;
+  min-height: 185px;
+}
+
+#contact .info-box h3 {
+  font-size: 20px;
+  color: #777777;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+#contact .info-box p {
+  text-align: center;
+  padding: 0;
+  line-height: 24px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+section#contact .info-box .social-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.mapouter iframe#gmap_canvas {
+  width: 100%;
+  min-height: 400px;
+}
+
+form.contact-form .border-stroke {
+  background: transparent;
+  font-size: 14px;
+  padding: 10px 15px;
+  font-weight: 400;
+}
+
+
+form.contact-form .shadow-submit {
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+section#contact {
+  padding-top: 9rem;
+  padding-bottom: 2rem;
+}
+
+@media(max-width:1020px){
+  .bg-img {
+    height: 500px;
+    background-size: cover;
+    width: 100%;
+    background-attachment: local;
+}
+ }
+
+ @media(max-width:767px){
+  .service-sec .service-row .col-md-3 {
+    width: 100%;
+ 
+}
+
+.service-sec .service-row .col-md-9 {
+  width: 100%;
+}
+
+.row.custom-table-row {
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+section.topbar .call-email {
+  font-size: 10px;
+}
+.bg-img {
+  height: 400px;
+  background-size: cover;
+  width: 100%;
+  background-attachment: local;
+}
+
+.home-hover .border {
+ 
+  max-height: 285px!important;
+  align-items: center;
+  width: 100%!important;
+}
+ }
+
+ @media(max-width:560px){
+  .bg-img {
+    height: 300px;
+    background-size: cover;
+    width: 100%;
+    background-attachment: local;
+}
+ }
