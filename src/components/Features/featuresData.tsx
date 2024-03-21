@@ -9,7 +9,7 @@ const featuresData: Feature[] = [
     buttontext:"Add to Group",
 
     paragraph:
-      "Solana's first public BuyBot on Telegram. Promoting cross-pollination and offering free exposure through {'AZUKI Trending'}. As adoption grows, a small fee for trending will be introduced, with a chance for free inclusion. Generated revenue feeds into the Treat Jar (Treasury) for transparency, contributing to $AZUKI's growth.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur.",
   },
   {
     id: 1,
@@ -19,7 +19,7 @@ const featuresData: Feature[] = [
     title: "Social-Fi mobile app",
     buttontext:"Coming soon...",
     paragraph:
-      "A social media app based on Solana Mobile that enables the ability to sell posted images and media as cNFT's where those who like/favourite posted images are eligible to receive a share of the final sale price. Cipher. Like a post, earn a share.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur.",
     },
   {
     id: 1,
@@ -31,7 +31,7 @@ const featuresData: Feature[] = [
     buttontext:"Coming soon...",
 
     paragraph:
-      "$AZUKI is set to transform the Solana ecosystem, delivering essential utilities for the evolving needs of users. Our commitment ensures a dynamic contribution to Solana's long-term growth, serving hundreds of thousands of users.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur.",
   },
   
   // {

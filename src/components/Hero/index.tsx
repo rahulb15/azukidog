@@ -137,12 +137,33 @@ const Hero = () => {
                 </p>
                 <div className="btn-div flex gap-x-5">
                   {/* <a href="#" className="primary-btn border-gradient">Buy on ecko<span className="third-color" style={{color:"#DA00C4"}}>DEX</span></a> */}
-                  <button className=" btn-buy">
+                  {/* <button className=" btn-buy">
                     Buy on ecko
                     <span className="third-color" style={{ color: "#DA00C4" }}>
                       DEX
                     </span>
-                  </button>
+                  </button> */}
+                   <motion.div
+                      className="flex items-center justify-center py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      }}
+                    >
+                      <button className="btn-nav gradi_border gradi_border-full">
+                        <span
+                          className="relative z-10"
+                          // onClick={() => setIsModalOpen(true)}
+                        >
+                            Buy on ecko
+                    <span className="third-color" style={{ color: "#DA00C4" }}>
+                      DEX
+                    </span>
+                        </span>
+                      </button>
+                    </motion.div>
                   {/* <a href="#" className="secondary-color-bg primary-btn">
                     Learn More{" "}
                   </a> */}

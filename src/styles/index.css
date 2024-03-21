@@ -319,7 +319,7 @@ header {
   font-weight: 800;
   font-size: 15px;
   color: #0f051d;
-  margin: 0 10px;
+  margin: 24px 1px;
 }
 
 .mid-sec-align {
@@ -592,6 +592,7 @@ a.button.connect-btn {
   justify-content: space-between;
   margin: 10px;
   margin-bottom: 40px;
+  flex-direction: column;
 }
 
 .border-gradient {
@@ -614,6 +615,10 @@ a.button.connect-btn {
   color: #a73c1f !important;
 }
 
+.image-rotate img {
+  transform: rotate(89deg);
+}
+
 .faqh3 {
 font-size: 25px;
 font-weight: 700;
@@ -622,7 +627,187 @@ text-align: left;
 
 }
 
+section.bg-alabaster .logo-link {
+  width: 100%;
+}
 
+section.bg-alabaster .logo-link img {
+  width: 100%!important;
+  opacity: 1;
+  height: 45px!important;
+}
+
+.inner-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* .border {
+  background: linear-gradient(90deg, #d209be 0%, #11d93e 100%);
+  border: 0;
+  margin-bottom: 20px;
+} */
+
+.gradi_border::before {
+  content: '';
+  background: black;
+  width: 99%;
+  height: 95%;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+}
+
+.gradi_border {
+  background: linear-gradient(90deg, #d209be 0%, #11d93e 100%);
+  border: 0;
+  margin: 20px 0;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 12px 25px;
+  transition: background 0.1s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.gradi_border:hover 
+  {animation: animatedgradient 3s ease alternate infinite;
+    background-size: 300% 300%;
+  }
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+.gradi_border>div {
+  z-index: 99;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.gray{
+  font-size: 14px;
+  color: #858585;
+  font-weight: 600;
+}
+
+.middium-gradi_border::before{
+
+    width: 95%;
+    height: 90%;
+    border-radius: 18px;
+}
+
+.gradi_border img, .gradi_border select {
+  z-index: 99;
+  background-color: transparent;
+  border: 0!important;
+  outline: 0!important;
+}
+
+
+.gradi_border-full, .gradi_border-full::before {
+  border-radius: 44px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  padding: 24px;
+}
+
+.gradi_circle::before {
+  border-radius: 50%;
+  width: 95%;
+  height: 94%;
+  padding: 0;
+}
+
+.gradi_border.gradi_circle {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+}
+.gradi_circle img {
+  z-index: 99;
+  color: #fff;
+  position: relative;
+  width: 25px;
+}
+
+button.btn-nav.gradi_border.gradi_border-full {
+  padding: 8px;
+  margin: 0;
+  min-height: 54px;
+  font-size: 16px;
+  color: #a9babd;
+  min-width: 159px;
+}
+button.btn-nav.gradi_border::before,
+.btn-how-buy.gradi_border::before {
+padding: 0;
+}
+
+.down_arrow {
+  position: absolute;
+  top: 38%;
+  left: 44%;
+  z-index: 99;
+  width: 49px;
+  height: 52px;
+}
+
+.home-hover.gradi_border {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0px;
+  border-radius: 20px!important;
+}
+
+button.btn-nav.gradi_border.gradi_border-full::before {
+  background: #041715;
+}
+
+.home-hover.gradi_border>div {
+  position: relative;
+  z-index: 99;
+  width: 99%!important;
+  border-radius: 14px;
+  max-height: 530px!important;
+  height: 100%!important;
+  background-color: transparent;
+}
+
+.home-hover.gradi_border::before {
+  height: 99%;
+  background: #150220;
+}
 @media (max-width: 1200px) {
   .bone3d-img::before {
     left: 0%;

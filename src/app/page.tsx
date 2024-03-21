@@ -10,6 +10,8 @@ import FollowAzuki from "@/components/Home/follow_azuki";
 import WhyChooseUs from "@/components/Home/WhyChoose";
 import AzukiPlushies from "@/components/Home/AzukiPlushies";
 import Tokenship from "@/components/Home/tokenship";
+import BuyEcko from "@/components/Home/BuyEcko";
+
 // import Slider from "@/components/Home/sliderSec";
 import FAQ from "@/components/Home/faq";
 
@@ -33,6 +35,8 @@ export default function Home() {
       <Bone3D />
 
       <BuySazuki />
+      <BuyEcko />
+
       <AzukiPlushies />
 
       <FeaturesCard />

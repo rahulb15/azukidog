@@ -9,6 +9,7 @@ import menuData from "./menuData";
 import { motion } from "framer-motion";
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
 
@@ -187,14 +188,24 @@ const Header = () => {
                     </li>
                   ))}
                   <li className="group relative">
-                  <motion.div
-                  className="flex items-center justify-center py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                    
-                    <button className="btn-nav">Connect Wallet</button>
-                  </motion.div>
+                    <motion.div
+                      className="flex items-center justify-center py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                      }}
+                    >
+                      <button className="btn-nav gradi_border gradi_border-full">
+                        <span
+                          className="relative z-10"
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          Connect Wallet
+                        </span>
+                      </button>
+                    </motion.div>
                   </li>
 
                   <li className="dark:border-t dark:border-dark dark:border-opacity-10 lg:hidden">
@@ -223,6 +234,89 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      <div
+        className={`modal fixed inset-0 z-50 bg-black bg-opacity-50 duration-300 ${
+          isModalOpen ? "visible" : "invisible"
+        }`}
+      >
+        {/* close icon */}
+
+        <div className="modal-content absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-dark p-8">
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="absolute right-4 top-4"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L19 19M19 1L1 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div className="flex items-center justify-center">
+            <h2 className="text-2xl font-semibold text-white">
+              Connect Wallet
+            </h2>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Image
+                src="/images/myro_img/dog_img.png"
+                alt="logo"
+                width={200}
+                height={60}
+                className="home-img"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              {/* <div className="flex items-center space-x-4"> */}
+              <Image
+                src="/images/brands/WalletConnect-logo1.svg"
+                alt="logo"
+                width={50}
+                height={50}
+                className="home-img"
+              />
+              <Image
+                src="/images/brands/WalletConnect-logo1.svg"
+                alt="logo"
+                width={50}
+                height={50}
+                className="home-img"
+              />
+              {/* </div> */}
+              {/* <div className="flex items-center space-x-4"> */}
+              <Image
+                src="/images/brands/WalletConnect-logo1.svg"
+                alt="logo"
+                width={50}
+                height={50}
+                className="home-img"
+              />
+              <Image
+                src="/images/brands/WalletConnect-logo1.svg"
+                alt="logo"
+                width={50}
+                height={50}
+                className="home-img"
+              />
+              {/* </div> */}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

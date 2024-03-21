@@ -3,7 +3,7 @@ import { Feature } from "@/types/feature";
 const SingleFeature = ({ feature }: { feature: Feature }) => {
   const { icon, title,buttontext, paragraph } = feature;
   return (
-    <div className="border rounded-lg p-8 overflow-auto bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl" style={{ height: '400px', width: '350px' }}>
+    <div className=" rounded-lg p-8 overflow-auto bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl" style={{ height: '400px', width: '350px' }}>
       <div className="wow fadeInUp" data-wow-delay=".15s">
         <div className="mb-10 flex h-[70px] w-[70px] items-center justify-center rounded-md bg-primary bg-opacity-10 text-primary border-radius">
           {icon}
