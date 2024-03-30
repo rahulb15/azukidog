@@ -14,7 +14,7 @@ const Features = () => {
         transition={{ duration: 1 }}
       >
         <div className="container mx-auto">
-          <div className="flex items-center">
+          <div className="flex items-center flex-wrap">
             <div className="basis-12/12 md:basis-1/2">
               <img src="/images/logo/azuki-brand.png" />
             </div>

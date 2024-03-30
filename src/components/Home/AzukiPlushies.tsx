@@ -7,7 +7,7 @@ const Features = () => {
         className="py-16 md:py-20 lg:py-28 items-center flex azukiplushies relative"
       >
         <div className="container mx-auto">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap">
             <div className="basis-12/12 md:basis-1/2">
               <img src="/images/myro_img/dog_img.png" />
             </div>

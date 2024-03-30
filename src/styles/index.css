@@ -509,7 +509,7 @@ a.btn-text {
 
 .card-sec {
   background: #f8f6ff;
-  max-width: 300px;
+  max-width: 380px;
   padding: 20px;
   border-radius: 10px;
   margin: 40px 0;
@@ -672,6 +672,10 @@ section.bg-alabaster .logo-link img {
   transition: background 0.1s cubic-bezier(0.4, 0, 1, 1);
 }
 
+a.btn-text.gradi_border {
+  background: linear-gradient(90deg, #d209be 0%, #11d93e 100%);
+}
+
 .gradi_border:hover 
   {animation: animatedgradient 3s ease alternate infinite;
     background-size: 300% 300%;
@@ -808,6 +812,56 @@ button.btn-nav.gradi_border.gradi_border-full::before {
   height: 99%;
   background: #150220;
 }
+
+.token-border.gradi_border::before {
+  width: 99.2%;
+  height: 95%;
+}
+
+.token-border {
+  padding: 20px;
+  margin: 10px;
+}
+
+.token-border h5, .token-border p {
+  position: relative;
+}
+
+.faq-border.gradi_border::before {
+  width: 99.6%;
+  height: 95%;
+  background: #121723;
+}
+
+.faq-border.gradi_border>div, .faq-border.gradi_border>p {
+  z-index: 999;
+  position: relative;
+}
+
+.btn-text.gradi_border::before {
+  width: 98%;
+  border-radius: 26px;
+}
+
+.btn-text.gradi_border span {
+  z-index: 99;
+}
+
+.btn-text.gradi_border::before {
+  width: 98%;
+  border-radius: 26px;
+  background: #150220;
+}
+
+nav#navbarCollapse li.dark\:border-t {
+  display: none;
+}
+
+nav#navbarCollapse li .flex.items-center.justify-center {
+  justify-content: flex-start;
+}
+
+
 @media (max-width: 1200px) {
   .bone3d-img::before {
     left: 0%;
@@ -840,7 +894,7 @@ button.btn-nav.gradi_border.gradi_border-full::before {
   nav#navbarCollapse ul li:last-child {
     display: none;
   }
-
+}
   /* section.buysazuki-sec {
   background: url("/images/myro_img/buy_sezuki.svg");
   background-repeat: no-repeat;
@@ -855,16 +909,56 @@ button.btn-nav.gradi_border.gradi_border-full::before {
 
   @media (max-width: 767px) {
     h1 {
-      font-size: 35px;
-    }
+      font-size: 35px!important;
+  }
 
     .btn-div,
     .btn-div a {
       flex-wrap: wrap;
       width: 100%;
     }
+
+    h2 {
+      font-size: 30px!important;
+      font-weight: 600;
   }
+
+  .token-border h5 {
+    font-size: 20px!important;
 }
+
+    h3 {
+      font-size: 20px!important;
+      line-height: 1.5!important;
+  }
+
+  .gradi_border img {
+    width: 12px!important;
+  }
+
+
+  .why-us-flex {
+    flex-direction: column;
+  }
+
+  .buysazuki-sec h1, section.featured_card h1, .whychoose p {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .token-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.text-padding {
+  padding: 0 20px;
+}
+
+  }
+
 @media (max-width: 1020px) {
   .bg-img {
     height: 500px;
@@ -912,6 +1006,19 @@ button.btn-nav.gradi_border.gradi_border-full::before {
     height: 397px;
     background-size: contain;
   }
+
+  .inner-logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+}
+
+section.bg-alabaster .logo-link {
+  width: 46%;
+}
 }
 
 @media (max-width: 560px) {
@@ -921,4 +1028,22 @@ button.btn-nav.gradi_border.gradi_border-full::before {
     width: 100%;
     background-attachment: local;
   }
+}
+
+@media(max-width:481px){
+  
+
+.gradi_border-full, .gradi_border-full::before {
+  font-size: 21px;
+  padding: 10px;
+}
+
+.token-flex span p, .token-flex span  {
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.faq-border {
+  padding: 14px 5px!important;
+}
 }

@@ -13,12 +13,13 @@ function Question() {
         className="bg-blue-500 max-width-screen-md mx-auto p-5 mt-20 rounded-xl"
         style={{ marginBottom: "250px" }}
       >
+        <div className="container">
         <h2 className="3xl:text-7xl mb-5 mt-5 text-center text-2xl font-bold text-white md:mb-0 md:mt-0 md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
           FAQ's
         </h2>
         <div className="mb-20"></div>
         <div
-          className="faq-border mb-4 rounded-xl bg-transparent p-3"
+          className="faq-border mb-4 rounded-xl bg-transparent p-3 gradi_border middium-gradi_border"
           onClick={() => setIsOpen1(!isOpen1)}
         >
           <div className="flex items-center justify-between w-full px-4">
@@ -57,7 +58,7 @@ function Question() {
           )}
         </div>
         <div
-          className="faq-border mb-4 rounded-xl bg-transparent p-3"
+          className="faq-border mb-4 rounded-xl bg-transparent p-3 gradi_border middium-gradi_border"
           onClick={() => setIsOpen2(!isOpen2)}
         >
           <div className="flex items-center justify-between w-full px-4">
@@ -95,7 +96,7 @@ function Question() {
           )}
         </div>
         <div
-          className="faq-border mb-4 rounded-xl bg-transparent p-3"
+          className="faq-border mb-4 rounded-xl bg-transparent p-3 gradi_border middium-gradi_border"
           onClick={() => setIsOpen3(!isOpen3)}
         >
           <div className="flex items-center justify-between w-full px-4">
@@ -133,6 +134,7 @@ function Question() {
               fair launched.
             </p>
           )}
+        </div>
         </div>
       </section>
     </>

@@ -15,7 +15,8 @@ const SingleFeature = ({ feature }: { feature: Feature }) => {
           {paragraph}
         </p>
 
-        <a href="#" className="btn-text">{buttontext}</a>
+        <a href="#" className="btn-text gradi_border">
+         <span> {buttontext} </span></a>
       </div>
     </div>
   );
