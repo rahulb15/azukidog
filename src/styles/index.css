@@ -862,6 +862,39 @@ nav#navbarCollapse li .flex.items-center.justify-center {
 }
 
 
+
+.howtobuy_azuki h1 {
+  width: 100%;
+}
+
+.middlecard .leftside_content .gradi_border::before {
+  display: none;
+}
+
+.middlecard .leftside_content a.btn-text {
+  background: linear-gradient(90deg, #d209be 0%, #11d93e 100%);
+  transition: 0.6s;
+}
+
+.middlecard .leftside_content a.btn-text::before {
+  display: block;
+  border-radius: 34px;
+  background: #150220;
+}
+
+.middlecard .leftside_content a.btn-text:hover {
+  transform: scale(1.1);
+}
+
+.card_content h2 {
+  font-size: 40px;
+  margin-bottom: 40px!important;
+}
+
+.middlecard .home-hover::before {
+  border-radius: 18px;
+}
+
 @media (max-width: 1200px) {
   .bone3d-img::before {
     left: 0%;
@@ -957,6 +990,32 @@ nav#navbarCollapse li .flex.items-center.justify-center {
   padding: 0 20px;
 }
 
+.middlecard .card_content {
+  flex-direction: column;
+}
+
+.middlecard .card_content .rightside_img img {
+  width: 155px!important;
+  margin: 20px 0;
+}
+
+.middlecard .card_content .leftside_content {
+  order: 1;
+}
+
+.middlecard .card_content .leftside_content {
+  order: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.middlecard .card_content .leftside_content h2 {
+  margin-bottom: 10px!important;
+}
+
   }
 
 @media (max-width: 1020px) {
@@ -1045,5 +1104,9 @@ section.bg-alabaster .logo-link {
 
 .faq-border {
   padding: 14px 5px!important;
+}
+
+.howtobuy_div .pawimg_div {
+  display: none;
 }
 }

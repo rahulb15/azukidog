@@ -221,7 +221,7 @@ const Header = () => {
                       </div>
                     </div>
                   </li>
-                  <li className=" lg:block">
+                  <li className="hidden lg:block">
                     <div className="flex items-center justify-between py-2">
                       <div>
                         <ThemeToggler />
