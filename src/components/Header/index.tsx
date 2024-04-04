@@ -1,17 +1,125 @@
 "use client";
 import Image from "next/image";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import { motion } from "framer-motion";
+import { NETWORKID } from "@/constants/contextConstants";
+import { useAccountContext } from "@/contexts";
+import { getAccounts, openZelcore } from "../../utils/zelcore";
+import { useWalletConnectClient } from "@/contexts/WalletConnectContext";
+import { toast } from "react-toastify";
+
+
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  const { session, connect, disconnect, isInitializing } =
+  useWalletConnectClient();
+const account = useAccountContext();
+console.log(account, "account");
+const [open, setOpen] = useState(false);
+const [accounts, setAccounts] = useState<any>();
+const [address, setAddress] = useState<string>("");
+const [successWalletAddress, setSuccessWalletAddress] = useState<string>("");
+const [zelcoreAccounts, setZelcoreAccounts] = useState<[string] | []>([]);
+const [selectedAccount, setSelectedAccount] = useState(null);
+const [approved, setApproved] = useState(false);
+const [openChainModal, setOpenChainModal] = useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
+const handleConnect = () => {
+  connect();
+  handleClose();
+};
+
+const getAccountsFromWallet = async () => {
+  console.log("getAccountsFromWallet");
+  openZelcore();
+  const getAccountsResponse = await getAccounts();
+  console.log(getAccountsResponse, "getAccountsResponse");
+  if (getAccountsResponse.status === "success") {
+    setSuccessWalletAddress(getAccountsResponse.data);
+    setApproved(true);
+    setAccounts(getAccountsResponse.data);
+    setOpen(false);
+    toast.success("Zelcore Wallet Connected Successfully");
+  } else {
+    /* walletError(); */
+  }
+};
+// useEffect(() => {
+//   async function fetchData() {
+//     await getAccountsFromWallet();
+//   }
+//   fetchData();
+// }, []);
+
+const handleZelcoreOpen = async () => {
+  getAccountsFromWallet();
+};
+
+const eckoWalletConnect = async () => {
+  // const checkNetwork = await window.kadena.request({
+  //   method: "kda_getNetwork",
+  // });
+  console.log("ddddddddddd");
+  // const checkNetwork = await (window as any).kadena.request({ method: "kda_getNetwork" });
+  // console.log(checkNetwork, "checkNetwork");
+
+  const checkNetwork = await (window as any).kadena.request({
+    method: "kda_getNetwork",
+  });
+  console.log(checkNetwork, "checkNetwork");
+  if (checkNetwork?.name === "Testnet" || checkNetwork?.name === "Mainnet") {
+    console.log("Testnet");
+    const response = await (window as any).kadena.request({
+      method: "kda_connect",
+      networkId: NETWORKID,
+    });
+    console.log(response, "response");
+    if (response?.status === "success") {
+      const account = await (window as any).kadena.request({
+        method: "kda_checkStatus",
+        networkId: NETWORKID,
+      });
+      console.log(account, "account");
+      if (account?.status === "success") {
+        setSuccessWalletAddress(response.account.account);
+        setAccounts(account.data);
+        setOpen(false);
+        toast.success("Ecko Wallet Connected Successfully");
+      }
+    }
+  }
+};
+
+
+console.log(accounts, "accounts");
+
+const handleConnectChainweaver = async () => {
+  const data = await account.setVerifiedAccount(address);
+  console.log(data, "data");
+  if (data?.status === "success") {
+    setSuccessWalletAddress(data.data.account);
+    setOpen(false);
+    setOpenChainModal(false);
+    toast.success("Chainweaver Connected Successfully");
+  }
+};
+
+const modalOpen = () => {
+  setOpenChainModal(true);
+};
+
+
+
+
 
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
@@ -282,6 +390,10 @@ const Header = () => {
             </div>
             <div className="flex items-center space-x-4">
               {/* <div className="flex items-center space-x-4"> */}
+              <button
+                onClick={handleConnect}
+                className=""
+              >
               <Image
                 src="/images/brands/WalletConnect-logo1.svg"
                 alt="logo"
@@ -289,34 +401,116 @@ const Header = () => {
                 height={50}
                 className="home-img"
               />
+              </button>
+              <button
+                onClick={handleZelcoreOpen}
+                className=""
+              >
               <Image
-                src="/images/brands/WalletConnect-logo1.svg"
+                src="/images/wallet/chainweaver.png"
                 alt="logo"
-                width={50}
-                height={50}
+                width={40}
+                height={40}
                 className="home-img"
               />
+              </button>
               {/* </div> */}
               {/* <div className="flex items-center space-x-4"> */}
+              <button
+                onClick={eckoWalletConnect}
+                className=""
+              >
               <Image
-                src="/images/brands/WalletConnect-logo1.svg"
+                src="/images/wallet/eckowallet1.svg"
                 alt="logo"
                 width={50}
                 height={50}
                 className="home-img"
               />
+              </button>
+              <button
+                onClick={getAccountsFromWallet}
+                className=""
+              >
               <Image
-                src="/images/brands/WalletConnect-logo1.svg"
+                src="/images/wallet/zelcore-logo.svg"
                 alt="logo"
                 width={50}
                 height={50}
                 className="home-img"
               />
-              {/* </div> */}
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      <div
+        className={`modal fixed inset-0 z-50 bg-black bg-opacity-50 duration-300 ${
+          openChainModal ? "visible" : "invisible"
+        }`}
+      >
+        {/* close icon */}
+        <div className="modal-content absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-dark p-8">
+          <button
+            onClick={() => setOpenChainModal(false)}
+            className="absolute right-4 top-4"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L19 19M19 1L1 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div className="flex items-center justify-center">
+            <h2 className="text-2xl font-semibold text-white">
+              Connect Wallet
+            </h2>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Image
+                src="/images/myro_img/dog_img.png"
+                alt="logo"
+                width={200}
+                height={60}
+                className="home-img"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4">
+                <input
+                  type="text"
+                  placeholder="Enter your address"
+                  className="input-field"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+                <button
+                  onClick={handleConnectChainweaver}
+                  className="btn-nav gradi_border gradi_border-full"
+                >
+                  Connect
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </>
   );
 };
