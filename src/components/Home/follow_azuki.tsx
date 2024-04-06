@@ -3,7 +3,7 @@ import React from "react";
 const FollowSazuki = () => {
   return (
     <>
-      <section className="buysazuki-sec py-16 relative" style={{background:"#121723", backgroundImage:"url('/images/myro_img/featured_bg1.png')"}}>
+      <section className="buysazuki-sec py-16 relative dark:bg-black" style={{ backgroundImage:"url('/images/myro_img/featured_bg1.png')"}}>
         <div className="container mx-auto">
           <div className="flex items-center justify-between flex-wrap">
           <div className="basis-full md:basis-5/12 flex justify-center">

@@ -4,7 +4,7 @@ const Features = () => {
   return (
     <>
       <section
-        className="py-16 md:py-20 lg:py-28 items-center flex azukiplushies relative"
+        className="py-16 md:py-20 lg:py-28 items-center flex azukiplushies relative dark:bg-black"
       >
         <div className="container mx-auto">
           <div className="flex items-center justify-between flex-wrap">
@@ -15,7 +15,7 @@ const Features = () => {
             <div className="basis-12/12 md:basis-1/2 text-padding">
             <h1 className="pb-5"> <span className="third-color"> AZUKI  </span> NFTs</h1>
             <p className="pb-5">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s
             </p>
             <p>when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur</p>
             

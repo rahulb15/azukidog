@@ -16,14 +16,14 @@ const Features = () => {
         <div className="container mx-auto">
           <div className="flex items-center flex-wrap">
             <div className="basis-12/12 md:basis-1/2">
-              <img src="/images/logo/azuki-brand.png" />
+              <img src="/images/logo/azuki-brand.png" style={{width:"80%"}} />
             </div>
 
             <div className="basis-12/12 md:basis-1/2 text-padding">
             <h1 className="pb-5 ">About <span className="third-color"> $AZUKI</span></h1>
             <p>
-            orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.<br/><br/>
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a ty
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.<br/><br/>
+            Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a ty
             </p>
             </div>
         </div>

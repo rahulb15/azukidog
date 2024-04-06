@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
+import { Link } from "react-scroll";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
@@ -10,116 +11,146 @@ import { NETWORKID } from "@/constants/contextConstants";
 import { useAccountContext } from "@/contexts";
 import { getAccounts, openZelcore } from "../../utils/zelcore";
 import { useWalletConnectClient } from "@/contexts/WalletConnectContext";
+import { useEckoWallletClient } from "@/contexts/EckoWalletContext";
 import { toast } from "react-toastify";
-
-
+import { ThreeDots } from "react-loader-spinner";
+import userService from "@/services/user.service";
+import { getBalance } from "@/utils/api/pact";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const { session, connect, disconnect, isInitializing } =
-  useWalletConnectClient();
-const account = useAccountContext();
-console.log(account, "account");
-const [open, setOpen] = useState(false);
-const [accounts, setAccounts] = useState<any>();
-const [address, setAddress] = useState<string>("");
-const [successWalletAddress, setSuccessWalletAddress] = useState<string>("");
-const [zelcoreAccounts, setZelcoreAccounts] = useState<[string] | []>([]);
-const [selectedAccount, setSelectedAccount] = useState(null);
-const [approved, setApproved] = useState(false);
-const [openChainModal, setOpenChainModal] = useState(false);
-const handleOpen = () => setOpen(true);
-const handleClose = () => setOpen(false);
-const handleConnect = () => {
-  connect();
-  handleClose();
-};
+  const { session, connect, disconnect, isInitializing, accounts } =
+    useWalletConnectClient();
+  const { eckoWalletConnect, eckoSuccessWalletAddress, eckoAccounts } =
+    useEckoWallletClient();
+  const account = useAccountContext();
+  const [open, setOpen] = useState(false);
+  const [openZelcoreModal, setOpenZelcoreModal] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [address, setAddress] = useState<string>("");
+  const [successWalletAddress, setSuccessWalletAddress] = useState<string>("");
+  const [zelcoreAccounts, setZelcoreAccounts] = useState<[string] | []>([]);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [approved, setApproved] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [balance, setBalance] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [openChainModal, setOpenChainModal] = useState(false);
+  const [openRegisterModal, setOpenRegisterModal] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleConnect = () => {
+    connect();
+    handleClose();
+  };
 
-const getAccountsFromWallet = async () => {
-  console.log("getAccountsFromWallet");
-  openZelcore();
-  const getAccountsResponse = await getAccounts();
-  console.log(getAccountsResponse, "getAccountsResponse");
-  if (getAccountsResponse.status === "success") {
-    setSuccessWalletAddress(getAccountsResponse.data);
-    setApproved(true);
-    setAccounts(getAccountsResponse.data);
-    setOpen(false);
-    toast.success("Zelcore Wallet Connected Successfully");
-  } else {
-    /* walletError(); */
-  }
-};
-// useEffect(() => {
-//   async function fetchData() {
-//     await getAccountsFromWallet();
-//   }
-//   fetchData();
-// }, []);
-
-const handleZelcoreOpen = async () => {
-  getAccountsFromWallet();
-};
-
-const eckoWalletConnect = async () => {
-  // const checkNetwork = await window.kadena.request({
-  //   method: "kda_getNetwork",
-  // });
-  console.log("ddddddddddd");
-  // const checkNetwork = await (window as any).kadena.request({ method: "kda_getNetwork" });
-  // console.log(checkNetwork, "checkNetwork");
-
-  const checkNetwork = await (window as any).kadena.request({
-    method: "kda_getNetwork",
-  });
-  console.log(checkNetwork, "checkNetwork");
-  if (checkNetwork?.name === "Testnet" || checkNetwork?.name === "Mainnet") {
-    console.log("Testnet");
-    const response = await (window as any).kadena.request({
-      method: "kda_connect",
-      networkId: NETWORKID,
-    });
-    console.log(response, "response");
-    if (response?.status === "success") {
-      const account = await (window as any).kadena.request({
-        method: "kda_checkStatus",
-        networkId: NETWORKID,
-      });
-      console.log(account, "account");
-      if (account?.status === "success") {
-        setSuccessWalletAddress(response.account.account);
-        setAccounts(account.data);
-        setOpen(false);
-        toast.success("Ecko Wallet Connected Successfully");
-      }
+  const checkUser = async (address: string) => {
+    const user = await userService.getUser(
+      address.length > 0 ? address : "null",
+    );
+    if (user?.data?.status === "success") {
+      localStorage.setItem("token", user.data.token);
+      localStorage.setItem("address", user.data.data.walletAddress);
+      setSuccessWalletAddress(user.data.data.walletAddress);
+      setOpenRegisterModal(false);
+      setIsModalOpen(false);
+    } else {
+      setOpenRegisterModal(true);
     }
-  }
-};
+  };
+
+  const getBalanceLocal = async (address: string) => {
+    const balance = await getBalance(address);
+    console.log(balance, "balance");
+    setBalance(balance || 0);
+    // return balance;
+  };
+  console.log(balance, "balance");
+
+  useEffect(() => {
+    const address = localStorage.getItem("address");
+    if (address?.length > 0) {
+      checkUser(address);
+      getBalanceLocal(address);
+    }
+  }, []);
+
+  const registerUser = async () => {
+    const user: any = await userService.register({
+      walletAddress: successWalletAddress,
+      email: email,
+      name: firstName,
+    });
+    if (user?.data?.status === "success") {
+      toast.success("User Registered Successfully");
+      localStorage.setItem("token", user.data.token);
+      setOpenRegisterModal(false);
+      setIsModalOpen(false);
+      localStorage.setItem("address", successWalletAddress);
+    } else {
+      toast.error(user.data.message);
+    }
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    // setLoading(true);
+    await registerUser();
+  };
+
+  const getAccountsFromWallet = async () => {
+    openZelcore();
+    const getAccountsResponse = await getAccounts();
+    if (getAccountsResponse.status === "success") {
+      setSuccessWalletAddress(getAccountsResponse.data);
+      setApproved(true);
+      setZelcoreAccounts(getAccountsResponse.data);
+      setOpen(false);
+      setOpenZelcoreModal(true);
+      // toast.success("Zelcore Wallet Connected Successfully");
+    } else {
+      /* walletError(); */
+    }
+  };
 
 
-console.log(accounts, "accounts");
+  const handleZelcoreOpen = async () => {
+    getAccountsFromWallet();
+  };
 
-const handleConnectChainweaver = async () => {
-  const data = await account.setVerifiedAccount(address);
-  console.log(data, "data");
-  if (data?.status === "success") {
-    setSuccessWalletAddress(data.data.account);
-    setOpen(false);
-    setOpenChainModal(false);
-    toast.success("Chainweaver Connected Successfully");
-  }
-};
-
-const modalOpen = () => {
-  setOpenChainModal(true);
-};
-
-
+  const onEckoWalletConnect = async () => {
+    setLoading(true);
+    setIsModalOpen(false);
+    const response = await eckoWalletConnect();
+    if (response?.status === "success") {
+      setSuccessWalletAddress(response.account.account);
+      setOpen(false);
+      toast.success("Ecko Wallet Connected Successfully");
+      setLoading(false);
+      checkUser(response.account.account);
+    }
+  };
 
 
+  const handleConnectChainweaver = async () => {
+    const data = await account.setVerifiedAccount(address);
+    if (data?.status === "success") {
+      setSuccessWalletAddress(data.data.account);
+      setOpen(false);
+      setOpenChainModal(false);
+      checkUser(data.data.account);
+      toast.success("Chainweaver Connected Successfully");
+    }
+  };
+
+  const modalOpen = () => {
+    setOpenChainModal(true);
+  };
 
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
@@ -149,7 +180,16 @@ const modalOpen = () => {
   };
 
   const usePathName = usePathname();
-  console.log(sticky, "sticky");
+
+  useEffect(() => {
+    // 'kadena:mainnet01:a1a5cc2c40ce6e96906426314998cd1c639f6a24ea96dc512d369d2e6dcb170a'
+
+    if (accounts?.length > 0) {
+      setSuccessWalletAddress(`k:${accounts[0]?.split(":")[2]}`);
+      localStorage.setItem("accountType", "walletconnect");
+      checkUser(`k:${accounts[0]?.split(":")[2]}`);
+    }
+  }, [accounts]);
 
   return (
     <>
@@ -163,13 +203,55 @@ const modalOpen = () => {
         <div className="container">
           <div className="relative -mx-4 flex items-center justify-between">
             <div className="w-60 max-w-full px-4 xl:mr-12">
-              <Link
+              {/* <Link
                 href="/"
                 className={`header-logo block w-full ${
                   sticky ? "py-5 lg:py-2" : "py-1"
                 } `}
               >
                 <div className="left-logo flex">
+                  <Image
+                    src="/images/logo/azuki-brand.png"
+                    alt="logo"
+                    width={80}
+                    height={30}
+                    className="logo-img dark:hidden"
+                  />
+
+                  <Image
+                    src="/images/myro_img/azuki_logotext.svg"
+                    alt="logo"
+                    width={80}
+                    height={30}
+                    className="logo-text dark:hidden"
+                  />
+
+                  <Image
+                    src="/images/logo/azuki-brand.png"
+                    alt="logo"
+                    width={80}
+                    height={30}
+                    className="logo-img hidden  dark:block"
+                  />
+
+                  <Image
+                    src="/images/myro_img/azuki_logotext.svg"
+                    alt="logo"
+                    width={80}
+                    height={30}
+                    className="logo-text hidden dark:block"
+                  />
+                </div>
+              </Link> */}
+              <Link
+                to="home"
+                smooth={true}
+                duration={500}
+                className={`header-logo block w-full ${
+                  sticky ? "py-5 lg:py-2" : "py-1"
+                } `}
+              >
+                <div className="left-logo flex cursor-pointer items-center">
                   <Image
                     src="/images/logo/azuki-brand.png"
                     alt="logo"
@@ -240,8 +322,28 @@ const modalOpen = () => {
                     // text bold
                     <li key={index} className="group relative">
                       {menuItem.path ? (
+                        // <Link
+                        //   href={menuItem.path}
+                        //   className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
+                        //     usePathName === menuItem.path
+                        //       ? "text-primary dark:text-white"
+                        //       : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
+                        //   }`}
+                        // >
+                        //   <span
+                        //     className={`${
+                        //       usePathName === menuItem.path
+                        //         ? "font-semibold dark:text-white"
+                        //         : "font-semibold dark:text-white/70 dark:hover:text-white"
+                        //     }`}
+                        //   >
+                        //     {menuItem.title}
+                        //   </span>
+                        // </Link>
                         <Link
-                          href={menuItem.path}
+                          to={menuItem.path}
+                          smooth={true}
+                          duration={500}
                           className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
                             usePathName === menuItem.path
                               ? "text-primary dark:text-white"
@@ -282,8 +384,17 @@ const modalOpen = () => {
                             }`}
                           >
                             {menuItem.submenu.map((submenuItem, index) => (
+                              // <Link
+                              //   href={submenuItem.path}
+                              //   key={index}
+                              //   className="block rounded py-2.5 text-sm text-dark hover:text-primary dark:text-white/70 dark:hover:text-white lg:px-3"
+                              // >
+                              //   {submenuItem.title}
+                              // </Link>
                               <Link
-                                href={submenuItem.path}
+                                to={submenuItem.path}
+                                smooth={true}
+                                duration={500}
                                 key={index}
                                 className="block rounded py-2.5 text-sm text-dark hover:text-primary dark:text-white/70 dark:hover:text-white lg:px-3"
                               >
@@ -305,14 +416,79 @@ const modalOpen = () => {
                         damping: 20,
                       }}
                     >
-                      <button className="btn-nav gradi_border gradi_border-full">
-                        <span
-                          className="relative z-10"
+                      {successWalletAddress.length === 0 ? (
+                        <button
                           onClick={() => setIsModalOpen(true)}
+                          className="btn-nav gradi_border gradi_border-full"
                         >
-                          Connect Wallet
-                        </span>
-                      </button>
+                          <span
+                            className="relative z-10"
+                            onClick={() => setIsModalOpen(true)}
+                          >
+                            Connect Wallet
+                          </span>
+                        </button>
+                      ) : (
+                        <div className="relative z-10">
+                          <button
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="btn-nav gradi_border gradi_border-full"
+                          >
+                            <span className="relative z-10">
+                              {`${successWalletAddress.slice(0, 6)}...${successWalletAddress.slice(
+                                -4,
+                              )}` || "Connect Wallet"}
+                            </span>
+                            {/* <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M6 9L10 13L14 9"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg> */}
+                          </button>
+                          <div
+                            className={`absolute right-1 top-full z-20 mt-1 w-[150px] rounded border border-body-color bg-white shadow-lg transition-all duration-300 dark:border-dark dark:border-opacity-10 dark:bg-dark dark:shadow-dark
+
+                             ${dropdownOpen ? "block" : "hidden"}`}
+                          >
+                            {/* //balance */}
+                            <div className="px-4 py-2 text-dark dark:text-white dark:border-dark dark:border-opacity-10 dark:text-white">
+                              Balance: {balance}
+                            </div>
+
+
+
+                            <button
+                              onClick={() => {
+                                if (
+                                  localStorage.getItem("accountType") ===
+                                  "walletconnect"
+                                ) {
+                                  disconnect();
+                                }
+                                localStorage.removeItem("accountType");
+                                localStorage.removeItem("token");
+                                localStorage.removeItem("address");
+
+                                setSuccessWalletAddress("");
+                                setDropdownOpen(false);
+                              }}
+                              className="block w-full px-4 py-2 text-left text-dark hover:bg-gray-100 dark:border-dark dark:border-opacity-10 dark:text-white dark:hover:bg-dark dark:hover:text-primary dark:hover:shadow-lg dark:hover:ring-1 dark:hover:ring-primary dark:hover:ring-opacity-20"
+                            >
+                              Disconnect
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </motion.div>
                   </li>
 
@@ -379,7 +555,15 @@ const modalOpen = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            {/* <div className="flex items-center"> */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              transition={{
+                type: "spring",
+                stiffness: 700,
+                damping: 50,
+              }}
+            >
               <Image
                 src="/images/myro_img/dog_img.png"
                 alt="logo"
@@ -387,58 +571,89 @@ const modalOpen = () => {
                 height={60}
                 className="home-img"
               />
-            </div>
+            </motion.div>
+            {/* </div> */}
             <div className="flex items-center space-x-4">
               {/* <div className="flex items-center space-x-4"> */}
-              <button
-                onClick={handleConnect}
-                className=""
-              >
-              <Image
-                src="/images/brands/WalletConnect-logo1.svg"
-                alt="logo"
-                width={50}
-                height={50}
-                className="home-img"
-              />
+              <button onClick={handleConnect} className="">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 700,
+                    damping: 50,
+                  }}
+                >
+                  <Image
+                    src="/images/brands/WalletConnect-logo1.svg"
+                    alt="logo"
+                    width={50}
+                    height={50}
+                    className="home-img"
+                  />
+                </motion.div>
               </button>
-              <button
-                onClick={handleZelcoreOpen}
-                className=""
-              >
-              <Image
-                src="/images/wallet/chainweaver.png"
-                alt="logo"
-                width={40}
-                height={40}
-                className="home-img"
-              />
+              <button onClick={modalOpen} className="">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 700,
+                    damping: 50,
+                  }}
+                >
+                  <Image
+                    src="/images/wallet/chainweaver.png"
+                    alt="logo"
+                    width={40}
+                    height={40}
+                    className="home-img"
+                  />
+                </motion.div>
               </button>
               {/* </div> */}
               {/* <div className="flex items-center space-x-4"> */}
-              <button
-                onClick={eckoWalletConnect}
-                className=""
-              >
-              <Image
-                src="/images/wallet/eckowallet1.svg"
-                alt="logo"
-                width={50}
-                height={50}
-                className="home-img"
-              />
+              <button onClick={onEckoWalletConnect} className="">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 700,
+                    damping: 50,
+                  }}
+                >
+                  <Image
+                    src="/images/wallet/eckowallet1.svg"
+                    alt="logo"
+                    width={50}
+                    height={50}
+                    className="home-img"
+                  />
+                </motion.div>
               </button>
               <button
-                onClick={getAccountsFromWallet}
+                onClick={() => {
+                  getAccountsFromWallet();
+                  // setOpenZelcoreModal(true)
+                }}
                 className=""
               >
-              <Image
-                src="/images/wallet/zelcore-logo.svg"
-                alt="logo"
-                width={50}
-                height={50}
-                className="home-img"
-              />
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 700,
+                    damping: 50,
+                  }}
+                >
+                  <Image
+                    src="/images/wallet/zelcore-logo.svg"
+                    alt="logo"
+                    width={50}
+                    height={50}
+                    className="home-img"
+                  />
+                </motion.div>
               </button>
             </div>
           </div>
@@ -490,8 +705,22 @@ const modalOpen = () => {
               />
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-4">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
                 <input
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    outline: "none",
+                    height: "50px",
+                  }}
                   type="text"
                   placeholder="Enter your address"
                   className="input-field"
@@ -502,7 +731,7 @@ const modalOpen = () => {
                   onClick={handleConnectChainweaver}
                   className="btn-nav gradi_border gradi_border-full"
                 >
-                  Connect
+                  <span className="relative z-10">Connect</span>
                 </button>
               </div>
             </div>
@@ -510,9 +739,276 @@ const modalOpen = () => {
         </div>
       </div>
 
+      <div
+        className={`modal fixed inset-0 z-50 bg-black bg-opacity-50 duration-300 ${
+          openRegisterModal ? "visible" : "invisible"
+        }`}
+      >
+        {/* close icon */}
+        <div className="modal-content absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-dark p-8">
+          <button
+            onClick={() => setOpenRegisterModal(false)}
+            className="absolute right-4 top-4"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L19 19M19 1L1 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <div className="w-full px-4">
+            <div className="mx-auto max-w-[500px] rounded bg-white px-6 py-10 shadow-three dark:bg-dark sm:p-[60px]">
+              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                Create your account
+              </h3>
+              <p className="mb-11 text-center text-base font-medium text-body-color"></p>
+              <form>
+                <div className="mb-8">
+                  <label
+                    htmlFor="first_name"
+                    className="mb-3 block text-sm text-dark dark:text-white"
+                  >
+                    {" "}
+                    First Name{" "}
+                  </label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    placeholder="Enter your First Name"
+                    value={firstName}
+                    onChange={(e) => {
+                      //email validation
+                      const re = /^[a-zA-Z\s]*$/;
+                      if (re.test(e.target.value)) {
+                        setFirstName(e.target.value);
+                      }
+                    }}
+                    className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label
+                    htmlFor="email"
+                    className="mb-3 block text-sm text-dark dark:text-white"
+                  >
+                    {" "}
+                    Email{" "}
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your Email"
+                    className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+                  />
+                </div>
 
+                <div className="mb-6">
+                  <button
+                    className="btn-nav gradi_border gradi_border-full"
+                    onClick={handleSubmit}
+                  >
+                    <span className="relative z-10">Sign up</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* modal with drop down input field with select option */}
+      <div
+        className={`modal fixed inset-0 z-50 bg-black bg-opacity-50 duration-300 ${
+          openZelcoreModal ? "visible" : "invisible"
+        }`}
+      >
+        <div className="modal-content absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-dark p-8">
+          <button
+            onClick={() => setOpenZelcoreModal(false)}
+            className="absolute right-4 top-4"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L19 19M19 1L1 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <div className="flex items-center justify-center">
+            <h2 className="text-2xl font-semibold text-white">Wallets</h2>
+          </div>
+
+          <div className="relative mt-6">
+            <div
+              className="flex items-center justify-between rounded-md bg-[#2C303B] px-4 py-3 text-white"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              {selectedAccount
+                ? `k:${selectedAccount.split(":")[2]}`
+                : "Select Wallet"}
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7 10L12 15L17 10"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            {dropdownOpen && (
+              <div className="absolute left-0 right-0 z-10 mt-2 max-h-60 overflow-auto rounded-md bg-[#2C303B] py-2 shadow-lg">
+                {zelcoreAccounts.map((account, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer px-4 py-3 text-white hover:bg-[#3B3F4B]"
+                    onClick={() => {
+                      setSelectedAccount(account);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    {`k:${account.split(":")[2]}`}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <button
+              className="btn-nav gradi_border gradi_border-full"
+              onClick={handleZelcoreOpen}
+            >
+              <span className="relative z-10">Connect Zelcore</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Loader */}
+      {loading && (
+        <div
+          className={`modal fixed inset-0 z-50 bg-black bg-opacity-50 duration-300 `}
+        >
+          <div className="modal-content absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-transparent p-8">
+            <div className="flex items-center justify-center">
+              <ThreeDots />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
+
+{
+  /* <div className="w-full px-4">
+              <div className="mx-auto max-w-[500px] rounded bg-white px-6 py-10 shadow-three dark:bg-dark sm:p-[60px]">
+                <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                  Create your account
+                </h3>
+                <p className="mb-11 text-center text-base font-medium text-body-color">
+                </p>
+                <form>
+                  <div className="mb-8">
+                    <label
+                      htmlFor="first_name"
+                      className="mb-3 block text-sm text-dark dark:text-white"
+                    >
+                      {" "}
+                      First Name{" "}
+                    </label>
+                    <input
+                      type="text"
+                      name="first_name"
+                      placeholder="Enter your First Name"
+                      value={firstName}
+                      onChange={(e) => {
+                        //email validation
+                        const re = /^[a-zA-Z\s]*$/;
+                        if (re.test(e.target.value)) {
+                          setFirstName(e.target.value);
+                        }
+                      }}
+                      className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+                    />
+                  </div>
+                  <div className="mb-8">
+                    <label
+                      htmlFor="email"
+                      className="mb-3 block text-sm text-dark dark:text-white"
+                    >
+                      {" "}
+                      Email{" "}
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your Email"
+                      className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+                    />
+                  </div>
+                  <div className="mb-8">
+                    <label
+                      htmlFor="password"
+                      className="mb-3 block text-sm text-dark dark:text-white"
+                    >
+                      {" "}
+                      Your Password{" "}
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your Password"
+                      className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+                    />
+                  </div>
+                 
+               
+                
+                  <div className="mb-6">
+                    <button
+                      className="flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark"
+                      onClick={handleSubmit}
+                    >
+                      Sign up
+                    </button>
+                  </div>
+                </form>
+              
+              </div>
+            </div> */
+}
 
 export default Header;

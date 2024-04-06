@@ -15,7 +15,7 @@ function Question() {
       >
         <div className="container">
         <h2 className="3xl:text-7xl mb-5 mt-5 text-center text-2xl font-bold text-white md:mb-0 md:mt-0 md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
-          FAQ's
+          FAQ&apos;s
         </h2>
         <div className="mb-20"></div>
         <div
@@ -64,7 +64,7 @@ function Question() {
           <div className="flex items-center justify-between w-full px-4">
             <h3 className="faqh3">
               Will <span style={{ color: "#09e239" }}>$Azuki</span> list on more
-              CEX's?
+              CEX&apos;s?
             </h3>
             {/* <button
               className="text-xl font-bold text-white"

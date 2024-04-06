@@ -4,7 +4,7 @@ const Features = () => {
   return (
     <>
       <section
-        className="py-16 md:py-20 lg:py-28 items-center flex azukiplushies relative"
+        className="py-16 md:py-20 lg:py-28 items-center flex azukiplushies relative dark:bg-black"
       >
         <div className="container mx-auto">
           <h1 className="font-bold my-4">Tokenomics</h1>

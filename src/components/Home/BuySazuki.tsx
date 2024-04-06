@@ -3,7 +3,7 @@ import React from "react";
 const BuySazuki = () => {
   return (
     <>
-      <section className="buysazuki-sec howtobuy_azuki py-16 pb-2 relative" style={{ background: "#000" }}>
+      <section className="buysazuki-sec howtobuy_azuki py-16 pb-2 relative dark:bg-black">
         <div className="container mx-auto">
           <div className="flex items-top justify-between flex-wrap">
             <div className="basis-full lg:basis-4/12" style={{ marginTop: "13%" }}>

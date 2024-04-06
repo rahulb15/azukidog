@@ -19,7 +19,7 @@ const Features = () => {
     <>
       <section
         id="features"
-        className="flex	items-center bg-center whychoose"
+        className="whychoose	flex items-center bg-center dark:bg-black"
         style={{
           backgroundImage: "url('/images/myro_img/whyus_bg.png')",
           minHeight: "1000px",
@@ -37,7 +37,7 @@ const Features = () => {
               Gokal’s pet dog, becoming a staple in the Solana memecoin space.
             </p>
           </div>
-          <div className="flex justify-between why-us-flex">
+          <div className="why-us-flex flex justify-between">
             <div className="flex basis-full items-center justify-center md:basis-1/3">
               <p className="flex max-w-xs	items-center	">
                 AZUKI will be more than just a memecoin, featuring several
@@ -47,8 +47,8 @@ const Features = () => {
             </div>
 
             <div className="flex basis-full items-center justify-center md:basis-1/3">
-              <div className="max-w-xs	flex	items-center	">
-              <img src="/images/logo/azuki-brand.png" width={'300px'} />
+              <div className="flex	max-w-xs	items-center	">
+                <img src="/images/logo/azuki-brand.png" width={"300px"} />
               </div>
               {/* <motion.div
                 style={{

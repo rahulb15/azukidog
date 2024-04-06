@@ -126,7 +126,6 @@ const Hero = () => {
                   dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                   dragElastic={0.5}
                   className="logo-text hidden dark:block"
-
                 />
 
                 <p className="my-10">
@@ -143,27 +142,32 @@ const Hero = () => {
                       DEX
                     </span>
                   </button> */}
-                   <motion.div
-                      className="flex items-center justify-center py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                      }}
-                    >
-                      <button className="btn-nav gradi_border gradi_border-full">
+                  <motion.div
+                    className="flex items-center justify-center py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20,
+                    }}
+                  >
+                    <button className="btn-nav gradi_border gradi_border-full">
+                      <span
+                        className="relative z-10"
+                        onClick={() => {
+                          window.open("https://swap.ecko.finance/");
+                        }}
+                      >
+                        Buy on ecko
                         <span
-                          className="relative z-10"
-                          // onClick={() => setIsModalOpen(true)}
+                          className="third-color"
+                          style={{ color: "#DA00C4" }}
                         >
-                            Buy on ecko
-                    <span className="third-color" style={{ color: "#DA00C4" }}>
-                      DEX
-                    </span>
+                          DEX
                         </span>
-                      </button>
-                    </motion.div>
+                      </span>
+                    </button>
+                  </motion.div>
                   {/* <a href="#" className="secondary-color-bg primary-btn">
                     Learn More{" "}
                   </a> */}
